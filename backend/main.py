@@ -27,15 +27,7 @@ def get_threats():
             timeout=20
         )
 
-        if response.status_code != 200:
-            return {
-                "feed_status": "error",
-                "status_code": response.status_code,
-                "response_preview": response.text[:500]
-            }
-
         data = response.json()
-
         vulnerabilities = data.get("vulnerabilities", [])
 
         critical = 0
@@ -45,8 +37,9 @@ def get_threats():
         for item in vulnerabilities:
             cve = item.get("cve", {})
 
-            if cve.get("id"):
-                recent_cves.append(cve["id"])
+            cve_id = cve.get("id")
+            if cve_id:
+                recent_cves.append(cve_id)
 
             metrics = cve.get("metrics", {})
             score = None
@@ -75,3 +68,23 @@ def get_threats():
             "feed_status": "error",
             "message": str(e)
         }
+
+@app.get("/api/incidents")
+def get_incidents():
+    return [
+        {
+            "id": "INC-1001",
+            "severity": "Critical",
+            "status": "Investigating"
+        },
+        {
+            "id": "INC-1002",
+            "severity": "High",
+            "status": "Containment"
+        },
+        {
+            "id": "INC-1003",
+            "severity": "Medium",
+            "status": "Monitoring"
+        }
+    ]

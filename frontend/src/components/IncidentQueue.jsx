@@ -1,22 +1,4 @@
-export default function IncidentQueue() {
-  const incidents = [
-    {
-      id: "INC-1001",
-      severity: "Critical",
-      status: "Investigating"
-    },
-    {
-      id: "INC-1002",
-      severity: "High",
-      status: "Containment"
-    },
-    {
-      id: "INC-1003",
-      severity: "Medium",
-      status: "Monitoring"
-    }
-  ];
-
+export default function IncidentQueue({ incidents = [] }) {
   return (
     <div
       style={{

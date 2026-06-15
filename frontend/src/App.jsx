@@ -3,17 +3,21 @@ import Sidebar from "./components/Sidebar";
 import MetricsCards from "./components/MetricsCards";
 import RecentCVEs from "./components/RecentCVEs";
 import ThreatSeverityChart from "./components/ThreatSeverityChart";
-import CVEDetails from "./components/CVEDetails";
-import { getThreatData } from "./api";
+import IncidentQueue from "./components/IncidentQueue";
+import { getThreatData, getIncidents } from "./api";
 
 export default function App() {
   const [data, setData] = useState(null);
+  const [incidents, setIncidents] = useState([]);
 
   useEffect(() => {
     const loadData = async () => {
       try {
-        const result = await getThreatData();
-        setData(result);
+        const threatData = await getThreatData();
+        const incidentData = await getIncidents();
+
+        setData(threatData);
+        setIncidents(incidentData);
       } catch (error) {
         console.error("API Error:", error);
       }
@@ -73,7 +77,7 @@ export default function App() {
 
         <RecentCVEs data={data} />
 
-        <CVEDetails data={data} />
+        <IncidentQueue incidents={incidents} />
       </div>
     </div>
   );
