@@ -14,81 +14,112 @@ import { getThreatData } from "./api";
 
 export default function App() {
   const [data, setData] = useState(null);
+  const [page, setPage] = useState("dashboard");
 
   useEffect(() => {
     const loadData = async () => {
       try {
         const result = await getThreatData();
         setData(result);
-      } catch (error) {
-        console.error("API Error:", error);
+      } catch (e) {
+        console.error(e);
       }
     };
 
     loadData();
-
     const interval = setInterval(loadData, 60000);
-
     return () => clearInterval(interval);
   }, []);
 
-  return (
-    <div
+  const MenuButton = ({ label, keyName }) => (
+    <button
+      onClick={() => setPage(keyName)}
       style={{
-        display: "flex",
-        minHeight: "100vh",
-        background:
-          "linear-gradient(135deg,#020617,#0f172a,#082f49)",
+        width: "100%",
+        padding: "12px",
+        marginBottom: "10px",
+        background: page === keyName ? "#06b6d4" : "#0f172a",
+        color: "white",
+        border: "none",
+        borderRadius: "10px",
+        cursor: "pointer",
       }}
     >
-      <Sidebar />
+      {label}
+    </button>
+  );
 
-      <div
-        style={{
-          flex: 1,
-          padding: "30px",
-        }}
-      >
-        <h1
-          style={{
-            color: "#22d3ee",
-            fontSize: "42px",
-            textShadow: "0 0 20px #22d3ee",
-          }}
-        >
+  return (
+    <div style={{ display: "flex", minHeight: "100vh", background:"#020617" }}>
+      <div style={{
+        width:"240px",
+        background:"#0f172a",
+        padding:"20px",
+        borderRight:"1px solid #1e293b"
+      }}>
+        <h2 style={{color:"white"}}>JCTS Defence</h2>
+
+        <MenuButton label="Dashboard" keyName="dashboard" />
+        <MenuButton label="Threat Intel" keyName="intel" />
+        <MenuButton label="Incidents" keyName="incidents" />
+        <MenuButton label="Analytics" keyName="analytics" />
+      </div>
+
+      <div style={{flex:1,padding:"30px"}}>
+        <h1 style={{color:"white"}}>
           JCTS Emerging Threat Defence
         </h1>
 
-        <p
-          style={{
-            color: "#94a3b8",
-            marginBottom: "20px",
-          }}
-        >
+        <p style={{color:"#94a3b8"}}>
           Live Threat Intelligence Dashboard
         </p>
 
         <LiveThreatTicker />
 
-        <MetricsCards data={data} />
+        {page === "dashboard" && (
+          <>
+            <MetricsCards data={data} />
+            <ThreatMap />
+            <WorldAttackSources />
+          </>
+        )}
 
-        <div style={{ marginTop: "25px" }}>
-          <ThreatSeverityChart data={data} />
-        </div>
+        {page === "intel" && (
+          <>
+            <RecentCVEs data={data} />
+            <CVEDetails data={data} />
+          </>
+        )}
 
-        <ThreatMap />
+        {page === "incidents" && (
+          <>
+            <IncidentQueue />
 
-        <WorldAttackSources />
+            <button
+              style={{
+                marginTop:"20px",
+                padding:"12px 20px",
+                background:"#06b6d4",
+                border:"none",
+                borderRadius:"10px",
+                cursor:"pointer"
+              }}
+              onClick={() =>
+                alert("PDF export endpoint will be connected next")
+              }
+            >
+              Export Incident Report PDF
+            </button>
+          </>
+        )}
 
-        <RecentCVEs data={data} />
-
-        <CVEDetails data={data} />
-
-        <IncidentQueue />
-
-        <ZeroTrustPanel />
-
-        <PostQuantumPanel />
+        {page === "analytics" && (
+          <>
+            <ThreatSeverityChart data={data} />
+            <ZeroTrustPanel />
+            <PostQuantumPanel />
+          </>
+        )}
       </div>
     </div>
   );
