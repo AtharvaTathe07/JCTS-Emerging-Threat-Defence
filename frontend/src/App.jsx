@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Sidebar from "./components/Sidebar";
 import MetricsCards from "./components/MetricsCards";
 import RecentCVEs from "./components/RecentCVEs";
+import ThreatSeverityChart from "./components/ThreatSeverityChart";
 import { getThreatData } from "./api";
 
 export default function App() {
@@ -18,6 +19,10 @@ export default function App() {
     };
 
     loadData();
+
+    const interval = setInterval(loadData, 60000);
+
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -56,6 +61,14 @@ export default function App() {
         </p>
 
         <MetricsCards data={data} />
+
+        <div
+          style={{
+            marginTop: "25px",
+          }}
+        >
+          <ThreatSeverityChart data={data} />
+        </div>
 
         <RecentCVEs data={data} />
       </div>

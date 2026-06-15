@@ -6,9 +6,7 @@ app = FastAPI(title="JCTS Emerging Threat Defence API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "https://automatic-bassoon-wvrg65w57gqwhvr9-5173.app.github.dev"
-    ],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -25,9 +23,16 @@ def home():
 def get_threats():
     try:
         response = requests.get(
-            "https://services.nvd.nist.gov/rest/json/cves/2.0?resultsPerPage=10",
+            "https://services.nvd.nist.gov/rest/json/cves/2.0?resultsPerPage=20",
             timeout=20
         )
+
+        if response.status_code != 200:
+            return {
+                "feed_status": "error",
+                "status_code": response.status_code,
+                "response_preview": response.text[:500]
+            }
 
         data = response.json()
 
@@ -39,20 +44,19 @@ def get_threats():
 
         for item in vulnerabilities:
             cve = item.get("cve", {})
-            cve_id = cve.get("id")
 
-            if cve_id:
-                recent_cves.append(cve_id)
+            if cve.get("id"):
+                recent_cves.append(cve["id"])
 
             metrics = cve.get("metrics", {})
             score = None
 
-            if "cvssMetricV31" in metrics:
+            if metrics.get("cvssMetricV31"):
                 score = metrics["cvssMetricV31"][0]["cvssData"]["baseScore"]
-            elif "cvssMetricV30" in metrics:
+            elif metrics.get("cvssMetricV30"):
                 score = metrics["cvssMetricV30"][0]["cvssData"]["baseScore"]
 
-            if score:
+            if score is not None:
                 if score >= 9:
                     critical += 1
                 elif score >= 7:
