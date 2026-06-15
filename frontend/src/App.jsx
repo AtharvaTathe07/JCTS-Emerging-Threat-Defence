@@ -3,6 +3,7 @@ import Sidebar from "./components/Sidebar";
 import MetricsCards from "./components/MetricsCards";
 import RecentCVEs from "./components/RecentCVEs";
 import ThreatSeverityChart from "./components/ThreatSeverityChart";
+import CVEDetails from "./components/CVEDetails";
 import { getThreatData } from "./api";
 
 export default function App() {
@@ -71,6 +72,8 @@ export default function App() {
         </div>
 
         <RecentCVEs data={data} />
+
+        <CVEDetails data={data} />
       </div>
     </div>
   );
