@@ -35,32 +35,52 @@ def get_threats():
         recent_cves = []
 
         for item in vulnerabilities:
+
             cve = item.get("cve", {})
 
-            cve_id = cve.get("id")
-            if cve_id:
-                recent_cves.append(cve_id)
+            cve_id = cve.get("id", "N/A")
+
+            description = "No description available"
+
+            if cve.get("descriptions"):
+                description = cve["descriptions"][0]["value"][:250]
 
             metrics = cve.get("metrics", {})
-            score = None
+
+            score = 0
 
             if metrics.get("cvssMetricV31"):
                 score = metrics["cvssMetricV31"][0]["cvssData"]["baseScore"]
+
             elif metrics.get("cvssMetricV30"):
                 score = metrics["cvssMetricV30"][0]["cvssData"]["baseScore"]
 
-            if score is not None:
-                if score >= 9:
-                    critical += 1
-                elif score >= 7:
-                    high += 1
+            severity = "Low"
+
+            if score >= 9:
+                severity = "Critical"
+                critical += 1
+
+            elif score >= 7:
+                severity = "High"
+                high += 1
+
+            elif score >= 4:
+                severity = "Medium"
+
+            recent_cves.append({
+                "id": cve_id,
+                "description": description,
+                "score": score,
+                "severity": severity
+            })
 
         return {
             "feed_status": "online",
             "latest_cves": len(vulnerabilities),
             "critical_cves": critical,
             "high_severity_cves": high,
-            "recent_cves": recent_cves[:5]
+            "recent_cves": recent_cves[:10]
         }
 
     except Exception as e:
