@@ -23,7 +23,7 @@ def home():
 def get_threats():
     try:
         response = requests.get(
-            "https://services.nvd.nist.gov/rest/json/cves/2.0?resultsPerPage=20",
+            "https://services.nvd.nist.gov/rest/json/cves/2.0?resultsPerPage=20&pubStartDate=2026-01-01T00:00:00.000",
             timeout=20
         )
 
