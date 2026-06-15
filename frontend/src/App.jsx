@@ -7,6 +7,9 @@ import IncidentQueue from "./components/IncidentQueue";
 import CVEDetails from "./components/CVEDetails";
 import ZeroTrustPanel from "./components/ZeroTrustPanel";
 import PostQuantumPanel from "./components/PostQuantumPanel";
+import ThreatMap from "./components/ThreatMap";
+import WorldAttackSources from "./components/WorldAttackSources";
+import LiveThreatTicker from "./components/LiveThreatTicker";
 import { getThreatData } from "./api";
 
 export default function App() {
@@ -33,8 +36,9 @@ export default function App() {
     <div
       style={{
         display: "flex",
-        background: "#020617",
         minHeight: "100vh",
+        background:
+          "linear-gradient(135deg,#020617,#0f172a,#082f49)",
       }}
     >
       <Sidebar />
@@ -47,9 +51,9 @@ export default function App() {
       >
         <h1
           style={{
-            color: "white",
-            fontSize: "38px",
-            marginBottom: "10px",
+            color: "#22d3ee",
+            fontSize: "42px",
+            textShadow: "0 0 20px #22d3ee",
           }}
         >
           JCTS Emerging Threat Defence
@@ -58,17 +62,23 @@ export default function App() {
         <p
           style={{
             color: "#94a3b8",
-            marginBottom: "30px",
+            marginBottom: "20px",
           }}
         >
           Live Threat Intelligence Dashboard
         </p>
+
+        <LiveThreatTicker />
 
         <MetricsCards data={data} />
 
         <div style={{ marginTop: "25px" }}>
           <ThreatSeverityChart data={data} />
         </div>
+
+        <ThreatMap />
+
+        <WorldAttackSources />
 
         <RecentCVEs data={data} />
 

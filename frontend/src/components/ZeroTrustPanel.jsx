@@ -1,36 +1,24 @@
 export default function ZeroTrustPanel() {
-  const controls = [
-    "Multi-Factor Authentication",
-    "Device Verification",
-    "Least Privilege Access",
-    "Continuous Monitoring",
-    "Micro-Segmentation"
-  ];
-
   return (
     <div
       style={{
-        background: "#0f172a",
-        border: "1px solid #1e293b",
-        borderRadius: "16px",
-        padding: "20px",
-        marginTop: "20px"
+        background:"#0f172a",
+        border:"1px solid #22d3ee",
+        borderRadius:"16px",
+        padding:"20px",
+        marginTop:"20px",
+        boxShadow:"0 0 20px rgba(34,211,238,.25)"
       }}
     >
-      <h2 style={{ color: "white" }}>
-        Zero Trust Security Controls
+      <h2 style={{color:"#22d3ee"}}>
+        Zero Trust Architecture
       </h2>
 
-      <ul
-        style={{
-          color: "#cbd5e1",
-          marginTop: "15px",
-          lineHeight: "2"
-        }}
-      >
-        {controls.map((item) => (
-          <li key={item}>{item}</li>
-        ))}
+      <ul style={{color:"white"}}>
+        <li>Identity Verification Active</li>
+        <li>MFA Enforcement Enabled</li>
+        <li>Least Privilege Access</li>
+        <li>Continuous Monitoring</li>
       </ul>
     </div>
   );
