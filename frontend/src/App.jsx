@@ -10,6 +10,12 @@ import PostQuantumPanel from "./components/PostQuantumPanel";
 import ThreatMap from "./components/ThreatMap";
 import WorldAttackSources from "./components/WorldAttackSources";
 import LiveThreatTicker from "./components/LiveThreatTicker";
+import MitreMatrix from "./components/MitreMatrix";
+import SOCFeed from "./components/SOCFeed";
+import AttackRadar from "./components/AttackRadar";
+import ThreatHuntConsole from "./components/ThreatHuntConsole";
+import ThreatHeatmap from "./components/ThreatHeatmap";
+import AIRecommendations from "./components/AIRecommendations";
 import { getThreatData } from "./api";
 import { jsPDF } from "jspdf";
 
@@ -105,12 +111,20 @@ export default function App() {
           </p>
 
           <LiveThreatTicker />
+import MitreMatrix from "./components/MitreMatrix";
+import SOCFeed from "./components/SOCFeed";
+import AttackRadar from "./components/AttackRadar";
+import ThreatHuntConsole from "./components/ThreatHuntConsole";
+import ThreatHeatmap from "./components/ThreatHeatmap";
+import AIRecommendations from "./components/AIRecommendations";
 
           {page === "dashboard" && (
             <>
               <MetricsCards data={data} />
               <ThreatMap />
               <WorldAttackSources />
+              <AttackRadar />
+              <SOCFeed />
             </>
           )}
 
@@ -118,6 +132,7 @@ export default function App() {
             <>
               <RecentCVEs data={data} />
               <CVEDetails data={data} />
+              <ThreatHuntConsole />
             </>
           )}
 
@@ -147,6 +162,9 @@ export default function App() {
               <ThreatSeverityChart data={data} />
               <ZeroTrustPanel />
               <PostQuantumPanel />
+              <MitreMatrix />
+              <ThreatHeatmap />
+              <AIRecommendations />
             </>
           )}
         </div>
