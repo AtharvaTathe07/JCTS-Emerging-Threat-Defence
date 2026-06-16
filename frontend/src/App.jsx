@@ -1,3 +1,4 @@
+import CyberBackground from "./components/CyberBackground";
 import { useEffect, useState } from "react";
 import Sidebar from "./components/Sidebar";
 import MetricsCards from "./components/MetricsCards";
@@ -29,6 +30,7 @@ export default function App() {
     loadData();
     const interval = setInterval(loadData, 60000);
     return () => clearInterval(interval);
+    <CyberBackground />
   }, []);
 
   const MenuButton = ({ label, keyName }) => (
@@ -50,6 +52,7 @@ export default function App() {
   );
 
   return (
+    <CyberBackground />
     <div style={{ display: "flex", minHeight: "100vh", background:"#020617" }}>
       <div style={{
         width:"240px",
