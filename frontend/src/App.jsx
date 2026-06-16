@@ -81,7 +81,7 @@ export default function App() {
         style={{
           display: "flex",
           minHeight: "100vh",
-          background: "rgba(2,6,23,.55)"
+          background: "transparent"
         }}
       >
         <div
@@ -111,12 +111,6 @@ export default function App() {
           </p>
 
           <LiveThreatTicker />
-import MitreMatrix from "./components/MitreMatrix";
-import SOCFeed from "./components/SOCFeed";
-import AttackRadar from "./components/AttackRadar";
-import ThreatHuntConsole from "./components/ThreatHuntConsole";
-import ThreatHeatmap from "./components/ThreatHeatmap";
-import AIRecommendations from "./components/AIRecommendations";
 
           {page === "dashboard" && (
             <>

@@ -1,25 +1,20 @@
-export default function IncidentQueue({ incidents = [] }) {
-  return (
-    <div
-      style={{
-        background: "#0f172a",
-        border: "1px solid #1e293b",
-        borderRadius: "16px",
-        padding: "20px",
-        marginTop: "20px"
-      }}
-    >
-      <h2 style={{ color: "white" }}>
-        Incident Response Queue
-      </h2>
+export default function IncidentQueue() {
+  const incidents = [
+    {id:"INC-1001",severity:"Critical",status:"Investigating"},
+    {id:"INC-1002",severity:"High",status:"Containment"},
+    {id:"INC-1003",severity:"Medium",status:"Monitoring"}
+  ];
 
-      <table
-        width="100%"
-        style={{
-          color: "white",
-          marginTop: "15px"
-        }}
-      >
+  return (
+    <div style={{
+      background:"rgba(15,23,42,.85)",
+      borderRadius:"16px",
+      padding:"20px",
+      marginTop:"20px"
+    }}>
+      <h2 style={{color:"white"}}>Incident Response Queue</h2>
+
+      <table width="100%" style={{color:"white"}}>
         <thead>
           <tr>
             <th align="left">ID</th>
@@ -29,11 +24,11 @@ export default function IncidentQueue({ incidents = [] }) {
         </thead>
 
         <tbody>
-          {incidents.map((incident) => (
-            <tr key={incident.id}>
-              <td>{incident.id}</td>
-              <td>{incident.severity}</td>
-              <td>{incident.status}</td>
+          {incidents.map(i=>(
+            <tr key={i.id}>
+              <td>{i.id}</td>
+              <td>{i.severity}</td>
+              <td>{i.status}</td>
             </tr>
           ))}
         </tbody>
