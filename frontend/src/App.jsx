@@ -1,6 +1,5 @@
 import CyberBackground from "./components/CyberBackground";
 import { useEffect, useState } from "react";
-import Sidebar from "./components/Sidebar";
 import MetricsCards from "./components/MetricsCards";
 import RecentCVEs from "./components/RecentCVEs";
 import ThreatSeverityChart from "./components/ThreatSeverityChart";
@@ -12,6 +11,7 @@ import ThreatMap from "./components/ThreatMap";
 import WorldAttackSources from "./components/WorldAttackSources";
 import LiveThreatTicker from "./components/LiveThreatTicker";
 import { getThreatData } from "./api";
+import { jsPDF } from "jspdf";
 
 export default function App() {
   const [data, setData] = useState(null);
@@ -29,9 +29,25 @@ export default function App() {
 
     loadData();
     const interval = setInterval(loadData, 60000);
+
     return () => clearInterval(interval);
-    <CyberBackground />
   }, []);
+
+  const exportPDF = () => {
+    const doc = new jsPDF();
+
+    doc.setFontSize(18);
+    doc.text("JCTS Incident Report", 20, 20);
+
+    doc.setFontSize(12);
+    doc.text("Generated: " + new Date().toLocaleString(), 20, 35);
+
+    doc.text("INC-1001  Critical  Investigating", 20, 55);
+    doc.text("INC-1002  High      Containment", 20, 70);
+    doc.text("INC-1003  Medium    Monitoring", 20, 85);
+
+    doc.save("JCTS-Incident-Report.pdf");
+  };
 
   const MenuButton = ({ label, keyName }) => (
     <button
@@ -44,7 +60,7 @@ export default function App() {
         color: "white",
         border: "none",
         borderRadius: "10px",
-        cursor: "pointer",
+        cursor: "pointer"
       }}
     >
       {label}
@@ -52,78 +68,89 @@ export default function App() {
   );
 
   return (
-    <CyberBackground />
-    <div style={{ display: "flex", minHeight: "100vh", background:"#020617" }}>
-      <div style={{
-        width:"240px",
-        background:"#0f172a",
-        padding:"20px",
-        borderRight:"1px solid #1e293b"
-      }}>
-        <h2 style={{color:"white"}}>JCTS Defence</h2>
+    <>
+      <CyberBackground />
 
-        <MenuButton label="Dashboard" keyName="dashboard" />
-        <MenuButton label="Threat Intel" keyName="intel" />
-        <MenuButton label="Incidents" keyName="incidents" />
-        <MenuButton label="Analytics" keyName="analytics" />
+      <div
+        style={{
+          display: "flex",
+          minHeight: "100vh",
+          background: "rgba(2,6,23,.55)"
+        }}
+      >
+        <div
+          style={{
+            width: "240px",
+            background: "rgba(15,23,42,.8)",
+            backdropFilter: "blur(10px)",
+            padding: "20px",
+            borderRight: "1px solid #1e293b"
+          }}
+        >
+          <h2 style={{ color: "white" }}>JCTS Defence</h2>
+
+          <MenuButton label="Dashboard" keyName="dashboard" />
+          <MenuButton label="Threat Intel" keyName="intel" />
+          <MenuButton label="Incidents" keyName="incidents" />
+          <MenuButton label="Analytics" keyName="analytics" />
+        </div>
+
+        <div style={{ flex: 1, padding: "30px" }}>
+          <h1 style={{ color: "white" }}>
+            JCTS Emerging Threat Defence
+          </h1>
+
+          <p style={{ color: "#94a3b8" }}>
+            Live Threat Intelligence Dashboard
+          </p>
+
+          <LiveThreatTicker />
+
+          {page === "dashboard" && (
+            <>
+              <MetricsCards data={data} />
+              <ThreatMap />
+              <WorldAttackSources />
+            </>
+          )}
+
+          {page === "intel" && (
+            <>
+              <RecentCVEs data={data} />
+              <CVEDetails data={data} />
+            </>
+          )}
+
+          {page === "incidents" && (
+            <>
+              <IncidentQueue />
+
+              <button
+                onClick={exportPDF}
+                style={{
+                  marginTop: "20px",
+                  padding: "12px 20px",
+                  background: "#06b6d4",
+                  border: "none",
+                  borderRadius: "10px",
+                  cursor: "pointer",
+                  fontWeight: "bold"
+                }}
+              >
+                Export Incident Report PDF
+              </button>
+            </>
+          )}
+
+          {page === "analytics" && (
+            <>
+              <ThreatSeverityChart data={data} />
+              <ZeroTrustPanel />
+              <PostQuantumPanel />
+            </>
+          )}
+        </div>
       </div>
-
-      <div style={{flex:1,padding:"30px"}}>
-        <h1 style={{color:"white"}}>
-          JCTS Emerging Threat Defence
-        </h1>
-
-        <p style={{color:"#94a3b8"}}>
-          Live Threat Intelligence Dashboard
-        </p>
-
-        <LiveThreatTicker />
-
-        {page === "dashboard" && (
-          <>
-            <MetricsCards data={data} />
-            <ThreatMap />
-            <WorldAttackSources />
-          </>
-        )}
-
-        {page === "intel" && (
-          <>
-            <RecentCVEs data={data} />
-            <CVEDetails data={data} />
-          </>
-        )}
-
-        {page === "incidents" && (
-          <>
-            <IncidentQueue />
-
-            <button
-              style={{
-                marginTop:"20px",
-                padding:"12px 20px",
-                background:"#06b6d4",
-                border:"none",
-                borderRadius:"10px",
-                cursor:"pointer"
-              }}
-              onClick={() =>
-                alert("PDF export endpoint will be connected next")
-              }
-            >
-              Export Incident Report PDF
-            </button>
-          </>
-        )}
-
-        {page === "analytics" && (
-          <>
-            <ThreatSeverityChart data={data} />
-            <ZeroTrustPanel />
-            <PostQuantumPanel />
-          </>
-        )}
-      </div>
-    </div>
+    </>
   );
 }
