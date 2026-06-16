@@ -1,79 +1,57 @@
-export default function CVEDetails({ data }) {
-  const cves = data?.recent_cves || [];
+import {useState} from "react";
 
-  const severityColor = (severity) => {
-    if (severity === "Critical") return "#ef4444";
-    if (severity === "High") return "#f97316";
-    if (severity === "Medium") return "#eab308";
-    return "#22c55e";
-  };
+export default function CVEDetails({data}){
 
-  return (
-    <div
+ const [search,setSearch]=useState("");
+
+ const cves=(data?.recent_cves||[])
+  .filter(c=>
+   (c.id||"")
+   .toLowerCase()
+   .includes(search.toLowerCase())
+  );
+
+ return(
+  <div style={{
+   background:"rgba(15,23,42,.55)",
+   backdropFilter:"blur(20px)",
+   borderRadius:"18px",
+   padding:"20px",
+   marginTop:"20px"
+  }}>
+   <h2 style={{color:"#67e8f9"}}>CVE Intelligence</h2>
+
+   <input
+    value={search}
+    onChange={e=>setSearch(e.target.value)}
+    placeholder="Search CVE..."
+    style={{
+      width:"100%",
+      padding:"12px",
+      marginBottom:"15px",
+      background:"#020617",
+      color:"white",
+      border:"1px solid #334155"
+    }}
+   />
+
+   {cves.map((c,i)=>(
+    <div key={i}
       style={{
-        background: "#0f172a",
-        border: "1px solid #1e293b",
-        borderRadius: "16px",
-        padding: "20px",
-        marginTop: "20px",
+       color:"#e2e8f0",
+       padding:"12px",
+       marginBottom:"10px",
+       borderRadius:"10px",
+       background:"rgba(255,255,255,.04)"
       }}
     >
-      <h2 style={{ color: "white", marginBottom: "20px" }}>
-        CVE Intelligence
-      </h2>
-
-      {cves.map((cve, index) => (
-        <div
-          key={index}
-          style={{
-            borderBottom: "1px solid #1e293b",
-            padding: "15px 0",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <strong style={{ color: "#38bdf8" }}>
-              {cve.id || cve}
-            </strong>
-
-            {cve.severity && (
-              <span
-                style={{
-                  background: severityColor(cve.severity),
-                  padding: "4px 10px",
-                  borderRadius: "20px",
-                  color: "white",
-                  fontSize: "12px",
-                }}
-              >
-                {cve.severity}
-              </span>
-            )}
-          </div>
-
-          {cve.score !== undefined && (
-            <p style={{ color: "#94a3b8", marginTop: "8px" }}>
-              CVSS Score: {cve.score}
-            </p>
-          )}
-
-          {cve.description && (
-            <p
-              style={{
-                color: "#cbd5e1",
-                marginTop: "8px",
-              }}
-            >
-              {cve.description}
-            </p>
-          )}
-        </div>
-      ))}
+      <strong>{c.id}</strong>
+      <br/>
+      Score: {c.score}
+      <br/>
+      Severity: {c.severity}
     </div>
-  );
+   ))}
+  </div>
+ );
 }
