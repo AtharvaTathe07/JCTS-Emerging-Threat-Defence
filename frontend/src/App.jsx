@@ -1,6 +1,7 @@
 import CyberBackground from "./components/CyberBackground";
 import { useEffect, useState } from "react";
 import MetricsCards from "./components/MetricsCards";
+import AnimatedMetrics from "./components/AnimatedMetrics";
 import RecentCVEs from "./components/RecentCVEs";
 import ThreatSeverityChart from "./components/ThreatSeverityChart";
 import IncidentQueue from "./components/IncidentQueue";
@@ -16,6 +17,9 @@ import AttackRadar from "./components/AttackRadar";
 import ThreatHuntConsole from "./components/ThreatHuntConsole";
 import ThreatHeatmap from "./components/ThreatHeatmap";
 import AIRecommendations from "./components/AIRecommendations";
+import EnterpriseSOCFeed from "./components/EnterpriseSOCFeed";
+import CVESearchPanel from "./components/CVESearchPanel";
+import EnterpriseHeatmap from "./components/EnterpriseHeatmap";
 import { getThreatData } from "./api";
 import { jsPDF } from "jspdf";
 
@@ -114,11 +118,12 @@ export default function App() {
 
           {page === "dashboard" && (
             <>
-              <MetricsCards data={data} />
+              <AnimatedMetrics data={data} />
               <ThreatMap />
               <WorldAttackSources />
               <AttackRadar />
               <SOCFeed />
+<EnterpriseSOCFeed />
             </>
           )}
 
@@ -126,6 +131,7 @@ export default function App() {
             <>
               <RecentCVEs data={data} />
               <CVEDetails data={data} />
+<CVESearchPanel data={data} />
               <ThreatHuntConsole />
             </>
           )}
@@ -158,6 +164,7 @@ export default function App() {
               <PostQuantumPanel />
               <MitreMatrix />
               <ThreatHeatmap />
+<EnterpriseHeatmap />
               <AIRecommendations />
             </>
           )}
